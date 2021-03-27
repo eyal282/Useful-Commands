@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"4.9"
+		"Latest"	"5.1"
 	}
 	
 	"Notes"	"Removed errors from bad queries."

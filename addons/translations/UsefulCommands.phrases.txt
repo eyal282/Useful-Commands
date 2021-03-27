@@ -1,588 +1,581 @@
-"Phrases"
-{
-	"Party Mode is Disabled"
-	{
-		"en"		"Party mode is disabled by the server."
-	}
-	"Party Mode Cookie Menu: Defuse Only"
-	{
-		"en"		"Party Mode: Defuse Only"
-	}
-	"Party Mode Cookie Menu: Zeus Only"
-	{
-		"en"		"Party Mode: Zeus Only"
-	}
-	
-	"Party Mode Cookie Menu: Enabled"
-	{
-		"en"		"Party Mode: Enabled"
-	}
-	
-	"Party Mode Cookie Menu: Disabled"
-	{
-		"en"		"Party Mode: Disabled"
-	}
-	"Scored an Ace"
-	{
-		"#format"	"{1:N}"
-		"en"	"Player{GREEN} {1}{NORMAL} scored an{OLIVE} ACE."
-	}
-	"UC Advertise"
-	{
-		"en" "This server is running{OLIVE} Useful Commands{NORMAL} by{LIGHTGREEN} Eyal282{NORMAL}!"
-	}
-	"UC Advertise 2"
-	{
-		"en" "Type{OLIVE} !uc{NORMAL} for the list of{OLIVE} Useful Commands{NORMAL}."
-	}
-	"Command Usage Target"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name>"
-	}
-	"Command Usage Target Toggle"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name> [1/0]"
-	}
-	"Command Usage Execute"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name> <command>"
-	}
-	"Command Usage Amount"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name> <amount>"
-	}
-	"Command Usage Team"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name> <CT/T/Spec>"
-	}
-	"Command Usage Swap"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name>"
-	}
-	"Command Usage Spec"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name>"
-	}
-	"Player Respawned"
-	{
-		"#format"	"{1:s}"
-		"en" "Respawned {1}."
-	}
-	"Player Hard Respawned"
-	{
-		"#format"	"{1:s}"
-		"en" "Respawned {1} at last death position."
-	}
-	"Already Buried"
-	{
-		"#format"	"{1:N}"
-		"en" "{1} is already buried!"
-	}
-	
-	"Already Not Buried"
-	{
-		"#format"	"{1:N}"
-		"en" "{1} is already unburied!"
-	}
-	"Player Buried"
-	{
-		"#format"	"{1:s}"
-		"en" "buried {1}."
-	}
-	"Player Unburied"
-	{
-		"#format"	"{1:s}"
-		"en" "unburied {1}."
-	}
-	"Player Already Uberslapped"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "{1} is already being uberslapped. Use {2} <target> 0 to stop uberslap."
-	}
-	"Player Already Not Uberslapped"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "{1} is not being uberslapped. Use {2} <target> 1 to uberslap."
-	}
-	"Player Uberslapped"
-	{
-		"#format"	"{1:s}"
-		"en" "began uberslapping {1}."
-	}
-	"Player Stop Uberslap"
-	{
-		"#format"	"{1:s}"
-		"en" "stopped uberslapping {1}."
-	}
-	"Command Usage Heal"
-	{
-		"en" "Usage: sm_heal <#userid|name> [health] [vest] [helmet:1/0]"
-	}
-	"Command Usage Note Heal"
-	{
-		"en" "Note: Use \"max\" to fully heal. Use letters to ignore values."
-	}
-	"Heal Admin Set"
-	{
-		"#format"	"{1:s}"
-		"en" "set {1} "
-	}
-
-	"Heal Admin Set Health"
-	{
-		"#format"	"{1:i}"
-		"en" "health to {1}, "
-	}
-	"Heal Admin Set Armor"
-	{
-		"#format"	"{1:i}"
-		"en" "armor to {1}, "
-	}
-	"Heal Admin Set Helmet"
-	{
-		"#format"	"{1:i}"
-		"en" "helmet to {1}, "
-	}
-	"Command Usage Give"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name> <weapon_knife>"
-	}
-	"Command Give Invalid Weapon"
-	{
-		"#format"	"{1:s}"
-		"en" "Weapon {1} does not exist."
-	}
-	"Player Given Weapon"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "gave weapon {1} to {2}."
-	}
-	"Second"
-	{
-		"en" "second"
-	}
-	"Seconds"
-	{
-		"en" "seconds"
-	}
-	"Admin Restart Round"
-	{
-		"#format"	"{1:N},{2:i},{3:t}"
-		"en" "Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the round in{OLIVE} {2}{NORMAL} {3}!"
-	}
-	"Admin Stopped Restart Round"
-	{
-		"#format"	"{1:N}"
-		"en" "Admin{GREEN} {1}{NORMAL} stopped the{LIGHTGREEN} round restart{NORMAL}!"
-	}
-	"Admin Restart Game"
-	{
-		"#format"	"{1:N},{2:i},{3:t}"
-		"en" "{NORMAL}Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the game in{OLIVE} {2}{NORMAL} {3}!"
-	}
-	"Admin Stopped Restart Game"
-	{
-		"#format"	"{1:N}"
-		"en" "Admin{GREEN} {1}{NORMAL} stopped the{LIGHTGREEN} game restart{NORMAL}!"
-	}
-	"Admin Restart Server"
-	{
-		"#format"	"{1:N},{2:i},{3:t}"
-		"en" "{NORMAL}Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the server in{OLIVE} {2}{NORMAL} {3}!"
-	}
-	"Admin Restart Server Next Round"
-	{
-		"#format"	"{1:N}"
-		"en" "{NORMAL}Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the server in{OLIVE} the next round{NORMAL}!"
-	}
-	"Admin Stopped Restart Server"
-	{
-		"#format"	"{1:N}"
-		"en" "Admin{GREEN} {1}{NORMAL} stopped the{LIGHTGREEN} server restart{NORMAL}!"
-	}
-	"Restart Server Blocked By Other Plugin"
-	{
-		"#format"	"{1:i}"
-		"en" "Due to another plugin, you need to set at least {1} seconds for the restart."
-	}
-	"Command Usage Glow"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <#userid|name> [color/off]"
-	}
-	"Command Glow List"
-	{
-		"en" "Check your console for a list of valid colors."
-	}
-	"Command Glow Invalid"
-	{
-		"en" "Glow color is invalid."
-	}
-	"Command Glow Failed to Give"
-	{
-		"#format"	"{1:N}"
-		"en" "Couldn't create glow on {1}"
-	}
-	"Command Glow Failed to Remove"
-	{
-		"#format"	"{1:N}"
-		"en" "{1} doesn't have glow."
-	}
-	"Player Given Glow"
-	{
-		"#format"	"{1:s}"
-		"en" "enabled glow on {1}"
-	}
-	"Player Removed Glow"
-	{
-		"#format"	"{1:s}"
-		"en" "disabled glow on {1}"
-	}
-	"Player Blinked"
-	{
-		"#format"	"{1:s}"
-		"en" "teleported {1} to aim position."
-	}
-	"Teleported to Player"
-	{
-		"#format"	"{1:s}"
-		"en" "teleported to {1}'s position."
-	}
-	"Already Godmode"
-	{
-		"#format"	"{1:N}"
-		"en" "{1} is already godmode. Use !god <target> 0 to disable."
-	}
-	"Already Not Godmode"
-	{
-		"#format"	"{1:N}"
-		"en" "{1} is not godmode."
-	}
-	"Player Given Godmode"
-	{
-		"#format"	"{1:s}"
-		"en" "enabled godmode on {1}."
-	}
-	"Player Removed Godmode"
-	{
-		"#format"	"{1:s}"
-		"en" "disabled godmode on {1}."
-	}
-	"Player Given Rocket"
-	{
-		"#format"	"{1:s}"
-		"en" "set rocket on {1}."
-	}
-	"Player Removed Rocket"
-	{
-		"#format"	"{1:s}"
-		"en" "removed rocket from {1}."
-	}
-	"Player Stripped"
-	{
-		"#format"	"{1:s}"
-		"en" "stripped {1}'s weapons."
-	}
-	"Player Executed"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "executed \"{1}\" on {2}."
-	}
-	"Player Brutally Executed"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "brutally executed \"{1}\" on {2}."
-	}
-	"Player Set Money"
-	{
-		"#format"	"{1:s},{2:i}"
-		"en" "set \"{1}\"s money to {2}."
-	}
-	"Player Set Team"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "set \"{1}\"s team to {2}."
-	}
-	"Player Swap Team"
-	{
-		"#format"	"{1:s}"
-		"en" "swapped \"{1}\" to the opposite team."
-	}
-	"Command UCEdit Enabled"
-	{
-		"en" "{NORMAL}You have{OLIVE} enabled{NORMAL} the UC editor."
-	}
-	"Command UCEdit Disabled"
-	{
-		"en" "{NORMAL}You have{OLIVE} disabled{NORMAL} the UC editor."
-	}
-	"Command UCEdit Info"
-	{
-		"en" "{NORMAL}UC Editor will make all chickens glow and you'll teleport to where you delete chickens from."
-	}
-	"Menu Chicken Create"
-	{
-		"en" "Create Chicken Spawner"
-	}
-	"Menu Chicken Delete"
-	{
-		"en" "Delete Chicken Spawner"
-	}
-	"Menu Chicken Delete Aim"
-	{
-		"en" "Delete Spawner on Aim"
-	}
-	"Menu Chicken Title"
-	{
-		"en" "Create at 64 units distance from each other and walls"
-	}
-	"Command Chicken Not Found"
-	{
-		"en" "{NORMAL}Could not find a{LIGHTGREEN} chicken spawner{NORMAL} at aim."
-	}
-	"Command Chicken No Spawners"
-	{
-		"en" "{NORMAL}This map doesn't have chicken spawners."
-	}
-	"Menu Chicken Delete Info"
-	{
-		"en" "Write !ucedit if server is empty for advanced features."
-	}
-	"Menu Yes"
-	{
-		"en" "Yes"
-	}
-	"Menu No"
-	{
-		"en" "No"
-	}
-	"Menu Chicken Delete Confirm"
-	{
-		"#format" "{1:s}"
-		"en" "Are you sure you wanna delete spawner at {1}?"
-	}
-	"Command Chicken Deleted"
-	{
-		"en" "{NORMAL}Chicken Spawner was successfully deleted!"
-	}
-	"Command Chicken Created"
-	{
-		"en" "{NORMAL}Chicken spawn point was created on your position."
-	}
-	"No Admin Access"
-	{
-		"en" "No admin access"
-	}
-	"Command Last Name SteamID"
-	{
-		"#format" "{1:s},{2:s}"
-		"en" "{NORMAL}Name:{GREEN} {1}{NORMAL}, Steam ID:{GREEN} {2}{NORMAL},"
-	}
-	"Command Last IP Last Disconnect"
-	{
-		"#format" "{1:s},{2:s}"
-		"en" "{NORMAL}IP Address:{GREEN} {1}{NORMAL}, Last disconnect:{GREEN} {2}"
-	}
-	"Command Last Console Full"
-	{
-		"#format" "{1:s},{2:s},{3:s},{4:s}"
-		"en" "Name: {1} | Steam ID: {2} | IP Address: {3} | Last disconnect: {4}"
-	}
-	"Command Error Alive"
-	{
-		"en" "This command can only be used by living players."
-	}
-	"Command Hug Nobody Found"
-	{
-		"en" "No dead players were found to hug."
-	}
-	"Player Hugged"
-	{
-		"#format" "{1:N},{2:N}"
-		"en" "{GREEN}{1}{OLIVE} hugged{GREEN} {2}{NORMAL}'s{LIGHTGREEN} dead body!"
-	}
-	"Player Ear Rape Tested"
-	{
-		"#format" "{1:s}"
-		"en" "Successfully self-muted all players except{OLIVE} {1}."
-	}
-	"Cleared Ear Rape Test"
-	{
-		"en" "Successfully cleared self mute from the last player you tested."
-	}
-	"Command Ear Rape Zero Arg Hint"
-	{
-		"en" "Hint: To make the test on a player, use sm_ertest <target>"
-	}
-	"Command Usage Silent Cvar"
-	{
-		"#format" "{1:s}"
-		"en" "Usage: {1} <cvar> [value]"
-	}
-	"Command Usage Custom Ace"
-	{
-		"#format" "{1:s}"
-		"en" "Usage: {1} <message>"
-	}
-	"Command Usage Find Cvar"
-	{
-		"#format" "{1:s}"
-		"en" "Usage: {1} <part of name>"
-	}
-	"Command Ace Message Set To Default"
-	{
-		"en" "Successfully set Ace fun fact to default message."
-	}
-	"Command Ace Message Set"
-	{
-		"#format" "{1:s}"
-		"en" "Successfully set Ace fun fact to{GREEN} {1}{NORMAL}."
-	}
-	"Command Ace Message Hint"
-	{
-		"en" "Hint: \"$name\" translates to your name, \"$team\" to your team, \"$opteam\" to your opponent team."
-	}
-	"Menu Wepstats Title"
-	{
-		"en" "Choose a weapon to get stats about:"
-	}
-	"Menu Wepstats Base Damage"
-	{
-		"#format" "{1:i}"
-		"en" "Base Damage: {1} per shot"
-	}
-	"Menu Wepstats Rate of Fire"
-	{
-		"#format" "{1:i}"
-		"en" "Rate of Fire: {1} RPM"
-	}
-	"Menu Wepstats Armor Penetration"
-	{
-		"#format" "{1:.1f}"
-		"en" "Armor Penetration: {1}%%"
-	}
-	"Menu Wepstats Kill Award"
-	{
-		"#format" "{1:i}"
-		"en" "Kill Award: {1}$"
-	}
-	"Menu Wepstats Wallbang Power"
-	{
-		"#format" "{1:.2f},{2:.2f}"
-		"en" "Wallbang Power: {1}*\n Note: To compare, AWP has {2}"
-	}
-	
-	"Menu Wepstats Damage Dropoff"
-	{
-		"#format" "{1:i}"
-		"en" "Damage Dropoff: {1}%% per 500 units"
-	}
-	
-	"Menu Wepstats Max Range"
-	{
-		"#format" "{1:i}"
-		"en" "Max Damage Range: {1} units"
-	}
-	"Menu Wepstats Pellets per Shot"
-	{
-		"#format" "{1:i}"
-		"en" "Pellets per Shot: {1}"
-	}
-	"Menu Wepstats Damage per Pellet"
-	{
-		"#format" "{1:i}"
-		"en" "Damage per Pellet: {1}"
-	}
-	"Menu Wepstats Fully Automatic"
-	{
-		"#format" "{1:s}"
-		"en" "Fully Automatic: {1}"
-	}
-	"Menu Wepstats Damage per Second Unarmored"
-	{
-		"#format" "{1:i}"
-		"en" "Damage per Second ( Unarmored ): {1}"
-	}
-	"Menu Wepstats Damage per Second Armored"
-	{
-		"#format" "{1:i}"
-		"en" "Damage per Second ( Armored ): {1}"
-	}
-	"Menu Wepstats One Tap Distance Unarmored"
-	{
-		"#format" "{1:i}"
-		"en" "One Tap Distance ( Unarmored ): {1}"
-	}
-	"Menu Wepstats One Tap Distance Armored"
-	{
-		"#format" "{1:i}"
-		"en" "One Tap Distance ( Armored ): {1}"
-	}
-	"Menu Wepstats One Tap Distance Unarmored Impossible"
-	{
-		"en" "One Tap Distance ( Unarmored ): Impossible"
-	}
-	"Menu Wepstats One Tap Distance Armored Impossible"
-	{
-		"en" "One Tap Distance ( Armored ): Impossible"
-	}
-	"Menu Wepstats Shotgun Note"
-	{
-		"en" "Note: Shotguns may have inaccurate distance measurements"
-	}
-	"Could Not Unbury You"
-	{
-		"en" "Could not unbury you."
-	}
-	"Command Usage Admin Cookies #1"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <name> <reset> <value>"
-	}
-	"Command Usage Admin Cookies #2"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <name> <set> <#userid|name> <value>"
-	}
-	"Command Usage Admin Cookies #3"
-	{
-		"#format"	"{1:s}"
-		"en" "Usage: {1} <name> <offlineset> <\"AuthId\"> <value>"
-	}
-	"Command Admin Cookies Get Value"
-	{
-		"#format"	"{1:s},{2:s},{3:s}"
-		"en" "{1}'s value for {2} is {3}"
-	}
-	"Command Admin Cookies Get Value Not Found"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "{1} does not have a perference cookie for \"{2}\""
-	}
-	"Command Admin Cookies Set Value"
-	{
-		"#format"	"{1:s},{2:s},{3:s}"
-		"en" "Changed the value of cookie \"{1}\" for {2} to \"{3}\"
-	}
-	"Command Admin Cookies Reset Success"
-	{
-		"#format"	"{1:s},{2:s}"
-		"en" "Successfully reset value of cookie \"{1}\" for everyone to value \"{2}\""
-	}
-	"Check Console"
-	{
-		"en" "Check the console for output."
-	}
-	"Could not find commands"
-	{
-		"en" "Could not find any commands."
-	}
+"Phrases"
+{
+	"Party Mode is Disabled"
+	{
+		"en" "Party mode is disabled by the server."
+	}
+	"Party Mode Cookie Menu: Defuse Only"
+	{
+		"en" "Party Mode: Defuse Only"
+	}
+	"Party Mode Cookie Menu: Zeus Only"
+	{
+		"en" "Party Mode: Zeus Only"
+	}
+	"Party Mode Cookie Menu: Enabled"
+	{
+		"en" "Party Mode: Enabled"
+	}
+	"Party Mode Cookie Menu: Disabled"
+	{
+		"en" "Party Mode: Disabled"
+	}
+	"Scored an Ace"
+	{
+		"#format" "{1:N}"
+		"en" "Player{GREEN} {1}{NORMAL} scored an{OLIVE} ACE."
+	}
+	"UC Advertise"
+	{
+		"en" "This server is running{OLIVE} Useful Commands{NORMAL} by{LIGHTGREEN} Eyal282{NORMAL}!"
+	}
+	"UC Advertise 2"
+	{
+		"en" "Type{OLIVE} !uc{NORMAL} for the list of{OLIVE} Useful Commands{NORMAL}."
+	}
+	"Command Usage Target"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name>"
+	}
+	"Command Usage Target Toggle"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name> [1/0]"
+	}
+	"Command Usage Execute"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name> <command>"
+	}
+	"Command Usage Amount"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name> <amount>"
+	}
+	"Command Usage Team"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name> <CT/T/Spec>"
+	}
+	"Command Usage Swap"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name>"
+	}
+	"Command Usage Spec"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name>"
+	}
+	"Player Respawned"
+	{
+		"#format" "{1:s}"
+		"en" "Respawned {1}."
+	}
+	"Player Hard Respawned"
+	{
+		"#format" "{1:s}"
+		"en" "Respawned {1} at last death position."
+	}
+	"Already Buried"
+	{
+		"#format" "{1:N}"
+		"en" "{1} is already buried!"
+	}
+	"Already Not Buried"
+	{
+		"#format" "{1:N}"
+		"en" "{1} is already unburied!"
+	}
+	"Player Buried"
+	{
+		"#format" "{1:s}"
+		"en" "buried {1}."
+	}
+	"Player Unburied"
+	{
+		"#format" "{1:s}"
+		"en" "unburied {1}."
+	}
+	"Player Already Uberslapped"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "{1} is already being uberslapped. Use {2} <target> 0 to stop uberslap."
+	}
+	"Player Already Not Uberslapped"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "{1} is not being uberslapped. Use {2} <target> 1 to uberslap."
+	}
+	"Player Uberslapped"
+	{
+		"#format" "{1:s}"
+		"en" "began uberslapping {1}."
+	}
+	"Player Stop Uberslap"
+	{
+		"#format" "{1:s}"
+		"en" "stopped uberslapping {1}."
+	}
+	"Command Usage Heal"
+	{
+		"en" "Usage: sm_heal <#userid|name> [health] [vest] [helmet:1/0]"
+	}
+	"Command Usage Note Heal"
+	{
+		"en" "Note: Use \"max\" to fully heal. Use letters to ignore values."
+	}
+	"Heal Admin Set"
+	{
+		"#format" "{1:s}"
+		"en" "set {1} "
+	}
+	"Heal Admin Set Health"
+	{
+		"#format" "{1:i}"
+		"en" "health to {1}, "
+	}
+	"Heal Admin Set Armor"
+	{
+		"#format" "{1:i}"
+		"en" "armor to {1}, "
+	}
+	"Heal Admin Set Helmet"
+	{
+		"#format" "{1:i}"
+		"en" "helmet to {1}, "
+	}
+	"Command Usage Give"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name> <weapon_knife>"
+	}
+	"Command Give Invalid Weapon"
+	{
+		"#format" "{1:s}"
+		"en" "Weapon {1} does not exist."
+	}
+	"Player Given Weapon"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "gave weapon {1} to {2}."
+	}
+	"Second"
+	{
+		"en" "second"
+	}
+	"Seconds"
+	{
+		"en" "seconds"
+	}
+	"Admin Restart Round"
+	{
+		"#format" "{1:N},{2:i},{3:t}"
+		"en" "Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the round in{OLIVE} {2}{NORMAL} {3}!"
+	}
+	"Admin Stopped Restart Round"
+	{
+		"#format" "{1:N}"
+		"en" "Admin{GREEN} {1}{NORMAL} stopped the{LIGHTGREEN} round restart{NORMAL}!"
+	}
+	"Admin Restart Game"
+	{
+		"#format" "{1:N},{2:i},{3:t}"
+		"en" "{NORMAL}Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the game in{OLIVE} {2}{NORMAL} {3}!"
+	}
+	"Admin Stopped Restart Game"
+	{
+		"#format" "{1:N}"
+		"en" "Admin{GREEN} {1}{NORMAL} stopped the{LIGHTGREEN} game restart{NORMAL}!"
+	}
+	"Admin Restart Server"
+	{
+		"#format" "{1:N},{2:i},{3:t}"
+		"en" "{NORMAL}Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the server in{OLIVE} {2}{NORMAL} {3}!"
+	}
+	"Admin Restart Server Next Round"
+	{
+		"#format" "{1:N}"
+		"en" "{NORMAL}Admin{GREEN} {1}{NORMAL} will{LIGHTGREEN} restart{NORMAL} the server in{OLIVE} the next round{NORMAL}!"
+	}
+	"Admin Stopped Restart Server"
+	{
+		"#format" "{1:N}"
+		"en" "Admin{GREEN} {1}{NORMAL} stopped the{LIGHTGREEN} server restart{NORMAL}!"
+	}
+	"Restart Server Blocked By Other Plugin"
+	{
+		"#format" "{1:i}"
+		"en" "Due to another plugin, you need to set at least {1} seconds for the restart."
+	}
+	"Command Usage Glow"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <#userid|name> [color/off]"
+	}
+	"Command Glow List"
+	{
+		"en" "Check your console for a list of valid colors."
+	}
+	"Command Glow Invalid"
+	{
+		"en" "Glow color is invalid."
+	}
+	"Command Glow Failed to Give"
+	{
+		"#format" "{1:N}"
+		"en" "Couldn't create glow on {1}"
+	}
+	"Command Glow Failed to Remove"
+	{
+		"#format" "{1:N}"
+		"en" "{1} doesn't have glow."
+	}
+	"Player Given Glow"
+	{
+		"#format" "{1:s}"
+		"en" "enabled glow on {1}"
+	}
+	"Player Removed Glow"
+	{
+		"#format" "{1:s}"
+		"en" "disabled glow on {1}"
+	}
+	"Player Blinked"
+	{
+		"#format" "{1:s}"
+		"en" "teleported {1} to aim position."
+	}
+	"Teleported to Player"
+	{
+		"#format" "{1:s}"
+		"en" "teleported to {1}'s position."
+	}
+	"Already Godmode"
+	{
+		"#format" "{1:N}"
+		"en" "{1} is already godmode. Use !god <target> 0 to disable."
+	}
+	"Already Not Godmode"
+	{
+		"#format" "{1:N}"
+		"en" "{1} is not godmode."
+	}
+	"Player Given Godmode"
+	{
+		"#format" "{1:s}"
+		"en" "enabled godmode on {1}."
+	}
+	"Player Removed Godmode"
+	{
+		"#format" "{1:s}"
+		"en" "disabled godmode on {1}."
+	}
+	"Player Given Rocket"
+	{
+		"#format" "{1:s}"
+		"en" "set rocket on {1}."
+	}
+	"Player Removed Rocket"
+	{
+		"#format" "{1:s}"
+		"en" "removed rocket from {1}."
+	}
+	"Player Stripped"
+	{
+		"#format" "{1:s}"
+		"en" "stripped {1}'s weapons."
+	}
+	"Player Executed"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "executed \"{1}\" on {2}."
+	}
+	"Player Brutally Executed"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "brutally executed \"{1}\" on {2}."
+	}
+	"Player Set Money"
+	{
+		"#format" "{1:s},{2:i}"
+		"en" "set \"{1}\"s money to {2}."
+	}
+	"Player Set Team"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "set \"{1}\"s team to {2}."
+	}
+	"Player Swap Team"
+	{
+		"#format" "{1:s}"
+		"en" "swapped \"{1}\" to the opposite team."
+	}
+	"Command UCEdit Enabled"
+	{
+		"en" "{NORMAL}You have{OLIVE} enabled{NORMAL} the UC editor."
+	}
+	"Command UCEdit Disabled"
+	{
+		"en" "{NORMAL}You have{OLIVE} disabled{NORMAL} the UC editor."
+	}
+	"Command UCEdit Info"
+	{
+		"en" "{NORMAL}UC Editor will make all chickens glow and you'll teleport to where you delete chickens from."
+	}
+	"Menu Chicken Create"
+	{
+		"en" "Create Chicken Spawner"
+	}
+	"Menu Chicken Delete"
+	{
+		"en" "Delete Chicken Spawner"
+	}
+	"Menu Chicken Delete Aim"
+	{
+		"en" "Delete Spawner on Aim"
+	}
+	"Menu Chicken Title"
+	{
+		"en" "Create at 64 units distance from each other and walls"
+	}
+	"Command Chicken Not Found"
+	{
+		"en" "{NORMAL}Could not find a{LIGHTGREEN} chicken spawner{NORMAL} at aim."
+	}
+	"Command Chicken No Spawners"
+	{
+		"en" "{NORMAL}This map doesn't have chicken spawners."
+	}
+	"Menu Chicken Delete Info"
+	{
+		"en" "Write !ucedit if server is empty for advanced features."
+	}
+	"Menu Yes"
+	{
+		"en" "Yes"
+	}
+	"Menu No"
+	{
+		"en" "No"
+	}
+	"Menu Chicken Delete Confirm"
+	{
+		"#format" "{1:s}"
+		"en" "Are you sure you wanna delete spawner at {1}?"
+	}
+	"Command Chicken Deleted"
+	{
+		"en" "{NORMAL}Chicken Spawner was successfully deleted!"
+	}
+	"Command Chicken Created"
+	{
+		"en" "{NORMAL}Chicken spawn point was created on your position."
+	}
+	"No Admin Access"
+	{
+		"en" "No admin access"
+	}
+	"Command Last Name SteamID"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "{NORMAL}Name:{GREEN} {1}{NORMAL}, Steam ID:{GREEN} {2}{NORMAL},"
+	}
+	"Command Last IP Last Disconnect"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "{NORMAL}IP Address:{GREEN} {1}{NORMAL}, Last disconnect:{GREEN} {2}"
+	}
+	"Command Last Console Full"
+	{
+		"#format" "{1:s},{2:s},{3:s},{4:s}"
+		"en" "Name: {1} | Steam ID: {2} | IP Address: {3} | Last disconnect: {4}"
+	}
+	"Command Error Alive"
+	{
+		"en" "This command can only be used by living players."
+	}
+	"Command Hug Nobody Found"
+	{
+		"en" "No dead players were found to hug."
+	}
+	"Player Hugged"
+	{
+		"#format" "{1:N},{2:N}"
+		"en" "{GREEN}{1}{OLIVE} hugged{GREEN} {2}{NORMAL}'s{LIGHTGREEN} dead body!"
+	}
+	"Player Ear Rape Tested"
+	{
+		"#format" "{1:s}"
+		"en" "Successfully self-muted all players except{OLIVE} {1}."
+	}
+	"Cleared Ear Rape Test"
+	{
+		"en" "Successfully cleared self mute from the last player you tested."
+	}
+	"Command Ear Rape Zero Arg Hint"
+	{
+		"en" "Hint: To make the test on a player, use sm_ertest <target>"
+	}
+	"Command Usage Silent Cvar"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <cvar> [value]"
+	}
+	"Command Usage Custom Ace"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <message>"
+	}
+	"Command Usage Find Cvar"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <part of name>"
+	}
+	"Command Ace Message Set To Default"
+	{
+		"en" "Successfully set Ace fun fact to default message."
+	}
+	"Command Ace Message Set"
+	{
+		"#format" "{1:s}"
+		"en" "Successfully set Ace fun fact to{GREEN} {1}{NORMAL}."
+	}
+	"Command Ace Message Hint"
+	{
+		"en" "Hint: \"$name\" translates to your name, \"$team\" to your team, \"$opteam\" to your opponent team."
+	}
+	"Menu Wepstats Title"
+	{
+		"en" "Choose a weapon to get stats about:"
+	}
+	"Menu Wepstats Base Damage"
+	{
+		"#format" "{1:i}"
+		"en" "Base Damage: {1} per shot"
+	}
+	"Menu Wepstats Rate of Fire"
+	{
+		"#format" "{1:i}"
+		"en" "Rate of Fire: {1} RPM"
+	}
+	"Menu Wepstats Armor Penetration"
+	{
+		"#format" "{1:.1f}"
+		"en" "Armor Penetration: {1}%%"
+	}
+	"Menu Wepstats Kill Award"
+	{
+		"#format" "{1:i}"
+		"en" "Kill Award: {1}$"
+	}
+	"Menu Wepstats Wallbang Power"
+	{
+		"#format" "{1:.2f},{2:.2f}"
+		"en" "Wallbang Power: {1}*\n Note: To compare, AWP has {2}"
+	}
+	"Menu Wepstats Damage Dropoff"
+	{
+		"#format" "{1:i}"
+		"en" "Damage Dropoff: {1}%% per 500 units"
+	}
+	"Menu Wepstats Max Range"
+	{
+		"#format" "{1:i}"
+		"en" "Max Damage Range: {1} units"
+	}
+	"Menu Wepstats Pellets per Shot"
+	{
+		"#format" "{1:i}"
+		"en" "Pellets per Shot: {1}"
+	}
+	"Menu Wepstats Damage per Pellet"
+	{
+		"#format" "{1:i}"
+		"en" "Damage per Pellet: {1}"
+	}
+	"Menu Wepstats Fully Automatic"
+	{
+		"#format" "{1:s}"
+		"en" "Fully Automatic: {1}"
+	}
+	"Menu Wepstats Damage per Second Unarmored"
+	{
+		"#format" "{1:i}"
+		"en" "Damage per Second ( Unarmored ): {1}"
+	}
+	"Menu Wepstats Damage per Second Armored"
+	{
+		"#format" "{1:i}"
+		"en" "Damage per Second ( Armored ): {1}"
+	}
+	"Menu Wepstats One Tap Distance Unarmored"
+	{
+		"#format" "{1:i}"
+		"en" "One Tap Distance ( Unarmored ): {1}"
+	}
+	"Menu Wepstats One Tap Distance Armored"
+	{
+		"#format" "{1:i}"
+		"en" "One Tap Distance ( Armored ): {1}"
+	}
+	"Menu Wepstats One Tap Distance Unarmored Impossible"
+	{
+		"en" "One Tap Distance ( Unarmored ): Impossible"
+	}
+	"Menu Wepstats One Tap Distance Armored Impossible"
+	{
+		"en" "One Tap Distance ( Armored ): Impossible"
+	}
+	"Menu Wepstats Shotgun Note"
+	{
+		"en" "Note: Shotguns may have inaccurate distance measurements"
+	}
+	"Could Not Unbury You"
+	{
+		"en" "Could not unbury you."
+	}
+	"Command Usage Admin Cookies #1"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <name> <reset> <value>"
+	}
+	"Command Usage Admin Cookies #2"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <name> <set> <#userid|name> <value>"
+	}
+	"Command Usage Admin Cookies #3"
+	{
+		"#format" "{1:s}"
+		"en" "Usage: {1} <name> <offlineset> <\"AuthId\"> <value>"
+	}
+	"Command Admin Cookies Get Value"
+	{
+		"#format" "{1:s},{2:s},{3:s}"
+		"en" "{1}'s value for {2} is {3}"
+	}
+	"Command Admin Cookies Get Value Not Found"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "{1} does not have a perference cookie for \"{2}\""
+	}
+	"Command Admin Cookies Set Value"
+	{
+		"#format" "{1:s},{2:s}"
+		"en" "Successfully reset value of cookie \"{1}\" for everyone to value \"{2}\""
+	}
+	"Check Console"
+	{
+		"en" "Check the console for output."
+	}
+	"Could not find commands"
+	{
+		"en" "Could not find any commands."
+	}
+	"Chat Cleared"
+	{
+		"en" "Cleared chat."
+	}
 }

@@ -20,13 +20,13 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "4.9"
+#define PLUGIN_VERSION "2.0"
 
 public Plugin myinfo = 
 {
 	name = "Useful commands",
 	author = "Eyal282",
-	description = "Useful commands.",
+	description = "Useful commands",
 	version = PLUGIN_VERSION,
 	url = "https://forums.alliedmods.net/showthread.php?p=2617618"
 }
@@ -85,7 +85,7 @@ enum Collision_Group_t
 
 #define GAME_RULES_CVARS_PATH "gamerulescvars.txt"
 
-#define UPDATE_URL    "https://raw.githubusercontent.com/eyal282/AlliedmodsUpdater/master/UsefulCommands/updatefile.txt"
+#define UPDATE_URL    "https://raw.githubusercontent.com/eyal282/Useful-Commands/master/addons/updatefile.txt"
 
 #define COMMAND_FILTER_NONE 0
 
@@ -187,6 +187,7 @@ Handle hcv_mpAnyoneCanPickupC4 = INVALID_HANDLE;
 Handle hcv_SolidTeammates = INVALID_HANDLE;
 Handle hcv_mpRespawnOnDeathT = INVALID_HANDLE;
 Handle hcv_mpRespawnOnDeathCT = INVALID_HANDLE;
+Handle hcv_mpRoundTime = INVALID_HANDLE;
 //new Handle:hcv_svCheats = INVALID_HANDLE;
 //new svCheatsFlags = 0;
 
@@ -205,6 +206,7 @@ Handle hcv_ucPacketNotifyCvars = INVALID_HANDLE;
 Handle hcv_ucGlowType = INVALID_HANDLE;
 Handle hcv_ucTag = INVALID_HANDLE;
 Handle hcv_ucRestartRoundOnMapStart = INVALID_HANDLE;
+Handle hcv_ucIgnoreRoundWinConditions = INVALID_HANDLE;
 
 Handle hCookie_EnablePM = INVALID_HANDLE;
 Handle hCookie_AceFunFact = INVALID_HANDLE;
@@ -515,6 +517,7 @@ public void OnPluginStart()
 	
 	hcv_mpRespawnOnDeathT = FindConVar("mp_respawn_on_death_t");
 	hcv_mpRespawnOnDeathCT = FindConVar("mp_respawn_on_death_ct");
+	hcv_mpRoundTime = FindConVar("mp_roundtime");
 	
 	//svCheatsFlags = GetConVarFlags(hcv_svCheats);
 	
@@ -525,10 +528,12 @@ public void OnPluginStart()
 	hcv_ucAcePriority = UC_CreateConVar("uc_ace_priority", "2", "Prioritize Ace over all other fun facts of a round's end and print a message when a player makes an ace. Set to 2 if you want players to have a custom fun fact on ace.");
 	hcv_ucReviveOnTeamChange = UC_CreateConVar("uc_revive_on_team_change", "1", "When an admin set a player's team: 0 - Slay player. 1 = Revive player. 2 = Just switch.");
 	hcv_ucRestartRoundOnMapStart = UC_CreateConVar("uc_restart_round_on_map_start", "1", "Restart the round when the map starts to block bug where round_start is never called on the first round.");
+	hcv_ucIgnoreRoundWinConditions = UC_CreateConVar("uc_ignore_round_win_conditions", "0", "Should rounds be infinite? Cvar doesn't support toggles, just pick a constant value.");
 	hcv_ucAnnouncePlugin = UC_CreateConVar("uc_announce_plugin", "36.5", "Announces to joining players that the best utility plugin is running, this cvar's value when after a player joins he'll get the message. 0 to disable.");
 	
 	GetConVarString(hcv_ucTag, UCTag, sizeof(UCTag));
 	HookConVarChange(hcv_ucTag, hcvChange_ucTag);
+	HookConVarChange(hcv_ucIgnoreRoundWinConditions, hcvChange_ucIgnoreRoundWinConditions);
 	
 	if(isCSGO())
 	{
@@ -567,6 +572,7 @@ public void OnPluginStart()
 	HookEvent("player_team", Event_PlayerTeam, EventHookMode_Post);
 	HookEvent("cs_win_panel_round", Event_CsWinPanelRound, EventHookMode_Pre);
 	HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
+	HookEvent("round_freeze_end", Event_RoundFreezeEnd, EventHookMode_PostNoCopy);
 	HookEvent("round_end", Event_RoundEnd, EventHookMode_Post);
 	
 	#if defined _updater_included
@@ -743,10 +749,17 @@ public void OnAllPluginsLoaded()
 	
 	if(!CommandExists("sm_findcvar"))
 		UC_RegAdminCmd("sm_findcvar", Command_FindCvar, ADMFLAG_ROOT, "Finds a cvar, even if it's hidden. Searches for commands as well.");
+	
+	if(!CommandExists("sm_cc"))	
+		UC_RegAdminCmd("sm_cc", Command_ClearChat, ADMFLAG_CHAT, "Clears the chat");
+
+
+	if(!CommandExists("sm_clear"))	
+		UC_RegAdminCmd("sm_clear", Command_ClearChat, ADMFLAG_CHAT, "Clears the chat");
 		
 	if(!CommandExists("sm_hug"))
 		UC_RegConsoleCmd("sm_hug", Command_Hug, "Hugs a dead player.");
-		
+	
 	UC_RegConsoleCmd("sm_uc", Command_UC, "Shows a list of UC commands.");
 	
 	if(isCSGO())
@@ -804,6 +817,16 @@ public void OnAllPluginsLoaded()
 public void hcvChange_ucTag(Handle convar, const char[] oldValue, const char[] newValue)
 {
 	FormatEx(UCTag, sizeof(UCTag), newValue);
+}
+
+public void hcvChange_ucIgnoreRoundWinConditions(Handle convar, const char[] oldValue, const char[] newValue)
+{
+	if(StringToInt(newValue) != 0)
+	{
+		ServerCommand("mp_ignore_round_win_conditions 1");
+		SetConVarFloat(hcv_mpRoundTime, 60.0);
+	}
+	
 }
 
 public void ConnectToDatabase()
@@ -922,6 +945,11 @@ public void OnConfigsExecuted()
 	if(!isCSGO())
 		return;
 	
+	if(GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+	{
+		ServerCommand("mp_ignore_round_win_conditions 1");
+		SetConVarFloat(hcv_mpRoundTime, 60.0);
+	}
 	bool Exists = FileExists(GAME_RULES_CVARS_PATH);
 	
 	int ucPacketNotifyCvars = GetConVarInt(hcv_ucPacketNotifyCvars);
@@ -1604,6 +1632,7 @@ public Action Event_RoundEnd(Handle hEvent, const char[] Name, bool dontBroadcas
 	return Plugin_Continue;
 	
 }
+
 public Action Event_RoundStart(Handle hEvent, const char[] Name, bool dontBroadcast)
 {
 	if(RestartNR && RestartTimestamp <= GetTime())
@@ -1668,6 +1697,28 @@ public Action Event_RoundStart(Handle hEvent, const char[] Name, bool dontBroadc
 			SpawnChicken(sOrigin);
 		}
 		CloseHandle(TempChickenOriginArray);
+	}
+	
+	if(GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+	{
+		ServerCommand("mp_ignore_round_win_conditions 1");
+		
+		SetConVarFloat(hcv_mpRoundTime, 60.0);
+		
+		GameRules_SetProp("m_iRoundTime", 0);
+	}
+}
+
+
+public Action Event_RoundFreezeEnd(Handle hEvent, const char[] Name, bool dontBroadcast)
+{
+	if(GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+	{
+		ServerCommand("mp_ignore_round_win_conditions 1");
+		
+		SetConVarFloat(hcv_mpRoundTime, 60.0);
+		
+		GameRules_SetProp("m_iRoundTime", 0);
 	}
 }
 
@@ -2475,8 +2526,17 @@ public void OnMapStart()
 	RestartNR = false;
 	
 	RequestFrame(RestartRoundOnMapStart, 0);
+	
+	if(isCSGO)
+		CreateTimer(3600.0, Timer_FromMapStart_PerHour, _, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
 }
 
+public Action Timer_FromMapStart_PerHour(Handle hTimer)
+{
+	if(hRestartTimer == INVALID_HANDLE && GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+		GameRules_SetPropFloat("m_flGameStartTime", GetGameTime());
+		
+}
 public void RestartRoundOnMapStart(int dummy_value)
 {
 	if(!isLateLoaded && GetConVarBool(hcv_ucRestartRoundOnMapStart))
@@ -3286,6 +3346,12 @@ public Action Command_RestartServer(int client, int args)
 			hNotifyRestartTimer = CreateTimer(float(SecondsBeforeRestart - result), NotifyRestartServer, result, TIMER_FLAG_NO_MAPCHANGE);
 			hRestartTimer = CreateTimer(float(SecondsBeforeRestart), RestartServer, _, TIMER_FLAG_NO_MAPCHANGE);
 			
+			if(isCSGO && GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+			{
+				GameRules_SetPropFloat("m_flGameStartTime", GetGameTime());
+				GameRules_SetProp("m_iRoundTime", RoundToFloor(GetGameTime() - 0.5) + SecondsBeforeRestart);
+			}
+				
 			if(SecondsBeforeRestart == 1)
 				Format(Arg, sizeof(Arg), "Second");
 				
@@ -3327,6 +3393,9 @@ public Action Command_RestartServer(int client, int args)
 		
 		Call_Finish();
 		
+		if(isCSGO && GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+			GameRules_SetProp("m_iRoundTime", 0);
+				
 		RestartNR = false;
 		UC_PrintToChatAll("%s%t", UCTag, "Admin Stopped Restart Server", client);
 	}
@@ -5249,6 +5318,19 @@ public Action Command_FindCvar(int client, int args)
 	UC_ReplyToCommand(client, "%s%t", UCTag, "Check Console");
 	return Plugin_Handled;
 }
+
+public Action Command_ClearChat(int client, int args)
+{	
+	for (int i = 0; i < 300;i++)
+	{
+		PrintToChatAll(" \x01\x0B \x0B");
+	}
+	
+	UC_ShowActivity2(client, UCTag, "%t", "Chat Cleared");
+	
+	return Plugin_Handled;
+}
+
 
 public Action Command_CustomAce(int client, int args)
 {

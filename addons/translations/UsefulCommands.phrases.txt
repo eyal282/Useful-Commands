@@ -282,6 +282,16 @@
 		"#format" "{1:s}"
 		"en" "removed rocket from {1}."
 	}
+	"Player Given Curse"
+	{
+		"#format" "{1:s}"
+		"en" "set curse on {1}."
+	}
+	"Player Removed Curse"
+	{
+		"#format" "{1:s}"
+		"en" "removed curse from {1}."
+	}
 	"Player Stripped"
 	{
 		"#format" "{1:s}"

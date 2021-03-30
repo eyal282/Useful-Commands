@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.1"
+#define PLUGIN_VERSION "5.2"
 
 public Plugin myinfo = 
 {
@@ -2417,10 +2417,10 @@ public void OnClientDisconnect(int client)
 		char Name[32], IPAddress[32], CurrentTime = GetTime();
 		GetClientName(client, Name, sizeof(Name));
 		GetClientIP(client, IPAddress, sizeof(IPAddress));
-		SQL_FormatQuery(dbLocal, sQuery, sizeof(sQuery), "INSERT OR IGNORE INTO UsefulCommands_LastPlayers (AuthId, IPAddress, Name, LastConnect) VALUES (\"%s\", \"%s\", \"%s\", %i)", AuthId, IPAddress, Name, CurrentTime);
-		SQL_TQuery(dbLocal, SQLCB_Error, sQuery, DBPrio_High);
+		SQL_FormatQuery(dbLocal, sQuery, sizeof(sQuery), "INSERT OR IGNORE INTO UsefulCommands_LastPlayers (AuthId, IPAddress, Name, LastConnect) VALUES ('%s', '%s', '%s', %i)", AuthId, IPAddress, Name, CurrentTime);
+		SQL_TQuery(dbLocal, SQLCB_Error, sQuery, _, DBPrio_High);
 		
-		SQL_FormatQuery(dbLocal, sQuery, sizeof(sQuery), "UPDATE UsefulCommands_LastPlayers SET IPAddress = \"%s\", Name = \"%s\", LastConnect = %i WHERE AuthId = \"%s\"", IPAddress, Name, CurrentTime, AuthId);
+		SQL_FormatQuery(dbLocal, sQuery, sizeof(sQuery), "UPDATE UsefulCommands_LastPlayers SET IPAddress = '%s', Name = '%s', LastConnect = %i WHERE AuthId = '%s'", IPAddress, Name, CurrentTime, AuthId);
 		SQL_TQuery(dbLocal, SQLCB_Error, sQuery, _, DBPrio_Normal);
 	}
 }
@@ -4660,7 +4660,7 @@ public int ChickenMenu_Handler(Handle hMenu, MenuAction action, int client, int 
 				char sQuery[256];
 				
 				UC_PrintToChat(client, TargetName);
-				SQL_FormatQuery(dbLocal, sQuery, sizeof(sQuery), "DELETE FROM UsefulCommands_Chickens WHERE ChickenOrigin = \"%s\" AND ChickenMap = \"%s\"", TargetName, MapName);
+				SQL_FormatQuery(dbLocal, sQuery, sizeof(sQuery), "DELETE FROM UsefulCommands_Chickens WHERE ChickenOrigin = '%s' AND ChickenMap = '%s'", TargetName, MapName);
 				SQL_TQuery(dbLocal, SQLCB_Error, sQuery);
 				
 				int Pos = FindStringInArray(ChickenOriginArray, TargetName);

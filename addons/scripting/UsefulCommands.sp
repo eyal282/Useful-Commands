@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.0"
+#define PLUGIN_VERSION "5.1"
 
 public Plugin myinfo = 
 {
@@ -240,6 +240,8 @@ Handle fw_ucWeaponStatsRetrievedPost = INVALID_HANDLE;
 
 bool AceSent = false;
 int TrueTeam[MAXPLAYERS+1];
+
+bool g_bCursed[MAXPLAYERS + 1];
 
 Handle dbLocal, dbClientPrefs;
 
@@ -702,6 +704,9 @@ public void OnAllPluginsLoaded()
 	
 	if(!CommandExists("sm_ertest"))
 		UC_RegAdminCmd("sm_ertest", Command_EarRapeTest, ADMFLAG_CHAT, "Mutes all players except target. Mutes are for the admin himself only to secretly find who's making earrape when 5 players talk simulatenously");
+		
+	if(!CommandExists("sm_curse"))
+		UC_RegAdminCmd("sm_curse", Command_Curse, ADMFLAG_CHEATS, "Curses a player, inverting their movement.");
 		
 	//if(!CommandExists("sm_cheat"))
 		//UC_RegAdminCmd("sm_cheat", Command_Cheat, ADMFLAG_CHEATS, "Writes a command bypassing its cheat flag.");	
@@ -1398,27 +1403,61 @@ public Action CS_OnGetWeaponPrice(int client, const char[] weapon, int &price)
 
 public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3], float angles[3], int &weapon, int &subtype, int &cmdnum, int &tickcount, int &seed, int mouse[2])
 {
+	Action ret = Plugin_Continue;
+	
+	if(g_bCursed[client])
+	{
+		for (int i = 0; i < 2;i++)
+		{
+			vel[i] = -vel[i];
+		}
+		
+		if(buttons & IN_FORWARD)
+		{
+			buttons &= ~IN_FORWARD;
+			buttons |= IN_BACK;
+		}
+		
+		else if(buttons & IN_BACK)
+		{
+			buttons &= ~IN_BACK;
+			buttons |= IN_FORWARD;
+		}
+		if(buttons & IN_MOVERIGHT)
+		{
+			buttons &= ~IN_MOVERIGHT;
+			buttons |= IN_MOVELEFT;
+		}
+		
+		else if(buttons & IN_MOVELEFT)
+		{
+			buttons &= ~IN_MOVELEFT;
+			buttons |= IN_MOVERIGHT;
+		}
+		
+		ret = Plugin_Changed;
+	}
 	if(!GetConVarBool(hcv_ucSpecialC4Rules))
-		return Plugin_Continue;
+		return ret;
 		
 	else if(!(buttons & IN_ATTACK) && !(buttons & IN_USE))
-		return Plugin_Continue;
+		return ret;
 	
 	else if(!GetEntProp(client, Prop_Send, "m_bInBombZone"))
-		return Plugin_Continue;
+		return ret;
 		
 	else if(GetClientTeam(client) != CS_TEAM_CT)
-		return Plugin_Continue;
+		return ret;
 		
 	int curWeapon;
 	if((curWeapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon")) == -1)
-		return Plugin_Continue;
+		return ret;
 		
 	char Classname[50];
 	GetEdictClassname(curWeapon, Classname, sizeof(Classname));
 	
 	if(!StrEqual(Classname, "weapon_c4", true))
-		return Plugin_Continue;
+		return ret;
 	
 	buttons &= ~IN_ATTACK;
 	buttons &= ~IN_USE;
@@ -1919,6 +1958,8 @@ public int PartyModeMenu_Handler(Handle hMenu, MenuAction action, int client, in
 public Action Event_PlayerSpawn(Handle hEvent, const char[] Name, bool dontBroadcast)
 {	
 	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
+	
+	g_bCursed[client] = false;
 	
 	//SetEntityFlags(client, GetEntityFlags(client) & ~FL_INWATER);
 	UberSlapped[client] = false;
@@ -3986,10 +4027,64 @@ public Action Command_EarRapeTest(int client, int args)
 	return Plugin_Handled;
 }
 
-public void Hook_PostThink(int client)
+
+public Action Command_Curse(int client, int args)
 {
-	SetEntProp(client, Prop_Send, "m_nWaterLevel", 3);
-}	
+	if (args < 1)
+	{
+		char arg0[65];
+		GetCmdArg(0, arg0, sizeof(arg0));
+		
+		UC_ReplyToCommand(client, "%s%t", UCTag, "Command Usage Target Toggle", arg0);
+		return Plugin_Handled;
+	}
+
+	char arg[65], arg2[65];
+	GetCmdArg(1, arg, sizeof(arg));
+	GetCmdArg(2, arg2, sizeof(arg2));
+
+	if(StrEqual(arg2, ""))
+		arg2 = "1";
+		
+	char target_name[MAX_TARGET_LENGTH];
+	int[] target_list = new int[MaxClients+1];
+	int target_count;
+	bool tn_is_ml;
+
+	target_count = ProcessTargetString(
+					arg,
+					client,
+					target_list,
+					MaxClients,
+					COMMAND_FILTER_ALIVE,
+					target_name,
+					sizeof(target_name),
+					tn_is_ml);
+
+
+	if(target_count <= COMMAND_TARGET_NONE) 	// If we don't have dead players
+	{
+		ReplyToTargetError(client, target_count);
+		return Plugin_Handled;
+	}
+	
+	bool curse = (StringToInt(arg2) != 0);
+	
+	for(int i=0;i < target_count;i++)
+	{
+		int target = target_list[i];
+		
+		UC_SetClientCurse(target, curse);
+	}
+	
+	if(curse)
+		UC_ShowActivity2(client, UCTag, "%t", "Player Given Curse", target_name); 
+	
+	else 
+		UC_ShowActivity2(client, UCTag, "%t", "Player Removed Curse", target_name);
+		
+	return Plugin_Handled;
+}
 
 public Action Command_Exec(int client, int args)
 {
@@ -5687,6 +5782,12 @@ public Action RocketHeightCheck(Handle hTimer, int UserId)
 	
 	return Plugin_Continue;
 }
+
+stock void UC_SetClientCurse(int client, bool curse)
+{
+	g_bCursed[client] = curse;
+}
+
 
 stock void UC_SetClientGodmode(int client, bool godmode)
 {

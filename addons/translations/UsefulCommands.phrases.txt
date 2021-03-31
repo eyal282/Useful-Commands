@@ -282,16 +282,6 @@
 		"#format" "{1:s}"
 		"en" "removed rocket from {1}."
 	}
-	"Player Given Curse"
-	{
-		"#format" "{1:s}"
-		"en" "set curse on {1}."
-	}
-	"Player Removed Curse"
-	{
-		"#format" "{1:s}"
-		"en" "removed curse from {1}."
-	}
 	"Player Stripped"
 	{
 		"#format" "{1:s}"
@@ -572,6 +562,11 @@
 		"en" "{1} does not have a perference cookie for \"{2}\""
 	}
 	"Command Admin Cookies Set Value"
+	{
+		"#format" "{1:s},{2:s},{3:s}"
+		"en" "Successfully reset value of cookie \"{1}\" for {2} to value \"{3}\""
+	}
+	"Command Admin Cookies Reset Success"
 	{
 		"#format" "{1:s},{2:s}"
 		"en" "Successfully reset value of cookie \"{1}\" for everyone to value \"{2}\""

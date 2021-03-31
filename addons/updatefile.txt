@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"5.1"
+		"Latest"	"5.3"
 	}
 	
-	"Notes"	"Removed errors from bad queries."
+	"Notes"	"Fixed sm_acookies support for MySQL based clientprefs."
 }
 	
 "Files"

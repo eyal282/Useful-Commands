@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"5.3"
+		"Latest"	"5.4"
 	}
 	
-	"Notes"	"Fixed sm_acookies support for MySQL based clientprefs."
+	"Notes"	"Fixed translation files"
 }
 	
 "Files"

@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"5.4"
+		"Latest"	"5.5"
 	}
 	
-	"Notes"	"Fixed translation files"
+	"Notes"	"Fixed prediction in curse."
 }
 	
 "Files"

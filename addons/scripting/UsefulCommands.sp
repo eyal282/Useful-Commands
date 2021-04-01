@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.3"
+#define PLUGIN_VERSION "5.4"
 
 public Plugin myinfo = 
 {

@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.4"
+#define PLUGIN_VERSION "5.5"
 
 public Plugin myinfo = 
 {
@@ -1416,33 +1416,8 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 	
 	if(g_bCursed[client])
 	{
-		for (int i = 0; i < 2;i++)
-		{
-			vel[i] = -vel[i];
-		}
-		
-		if(buttons & IN_FORWARD)
-		{
-			buttons &= ~IN_FORWARD;
-			buttons |= IN_BACK;
-		}
-		
-		else if(buttons & IN_BACK)
-		{
-			buttons &= ~IN_BACK;
-			buttons |= IN_FORWARD;
-		}
-		if(buttons & IN_MOVERIGHT)
-		{
-			buttons &= ~IN_MOVERIGHT;
-			buttons |= IN_MOVELEFT;
-		}
-		
-		else if(buttons & IN_MOVELEFT)
-		{
-			buttons &= ~IN_MOVELEFT;
-			buttons |= IN_MOVERIGHT;
-		}
+		vel[0] = -vel[0];
+		vel[1] = -vel[1];
 		
 		ret = Plugin_Changed;
 	}

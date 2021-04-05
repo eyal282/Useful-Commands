@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.5"
+#define PLUGIN_VERSION "5.6"
 
 public Plugin myinfo = 
 {
@@ -2553,13 +2553,16 @@ public void OnMapStart()
 	RequestFrame(RestartRoundOnMapStart, 0);
 	
 	if(isCSGO)
-		CreateTimer(3600.0, Timer_FromMapStart_PerHour, _, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT);
+		TriggerTimer(CreateTimer(3600.0, Timer_FromMapStart_PerHour, _, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT), true);
 }
 
 public Action Timer_FromMapStart_PerHour(Handle hTimer)
 {
 	if(hRestartTimer == INVALID_HANDLE && GetConVarBool(hcv_ucIgnoreRoundWinConditions))
+	{
 		GameRules_SetPropFloat("m_flGameStartTime", GetGameTime());
+		GameRules_SetPropFloat("m_fRoundStartTime", GetGameTime());
+	}
 		
 }
 public void RestartRoundOnMapStart(int dummy_value)
@@ -3374,7 +3377,8 @@ public Action Command_RestartServer(int client, int args)
 			if(isCSGO && GetConVarBool(hcv_ucIgnoreRoundWinConditions))
 			{
 				GameRules_SetPropFloat("m_flGameStartTime", GetGameTime());
-				GameRules_SetProp("m_iRoundTime", RoundToFloor(GetGameTime() - 0.5) + SecondsBeforeRestart);
+				GameRules_SetPropFloat("m_fRoundStartTime", GetGameTime());
+				GameRules_SetProp("m_iRoundTime", SecondsBeforeRestart);
 			}
 				
 			if(SecondsBeforeRestart == 1)
@@ -5344,9 +5348,14 @@ public Action Command_FindCvar(int client, int args)
 	GetCmdArgString(CvarToSearch, sizeof(CvarToSearch));
 	
 	char CmdFlags[128];
+	int count;
+	
 	
 	do
 	{
+		if(count >= 50)
+			break;
+			
 		GetCommandFlagString(flags, CmdFlags, sizeof(CmdFlags));
 		
 		Handle convar;
@@ -5388,6 +5397,8 @@ public Action Command_FindCvar(int client, int args)
 				Format(OutputBounds, sizeof(OutputBounds), "%s max. %f ", OutputBounds, CvarUpper);
 						
 			PrintToConsole(client, "\"%s\" = \"%s\" %s%s%s    %s", buffer, CvarValue, OutputDefault, OutputBounds, CmdFlags, description);
+			
+			count++;
 		}
 		//PrintToConsole(client, Output);
 	}
@@ -5635,8 +5646,7 @@ public Action Command_UC(int client, int args)
 	int size = TrieSnapshotLength(Trie_Snapshot);
 	
 	char buffer[256];
-	
-	PrintToChat(client, "%i", GetEntProp(client, Prop_Send, "m_nWaterLevel"));
+
 	if(isCSGO())
 		AddMenuItem(hMenu, "sm_settings", "sm_settings");
 	

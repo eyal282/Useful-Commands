@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"5.5"
+		"Latest"	"5.6"
 	}
 	
-	"Notes"	"Fixed prediction in curse."
+	"Notes"	"Infinite round cvar uc_ignore_round_win_conditions now always allows the restart server command to display the time left in the round timer."
 }
 	
 "Files"

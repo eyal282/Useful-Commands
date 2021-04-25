@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"5.6"
+		"Latest"	"5.7"
 	}
 	
-	"Notes"	"Infinite round cvar uc_ignore_round_win_conditions now always allows the restart server command to display the time left in the round timer."
+	"Notes"	"Fixed all player stuck involved commands ( bury, goto, etc... )"
 }
 	
 "Files"

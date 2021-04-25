@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.7"
+#define PLUGIN_VERSION "5.8"
 
 public Plugin myinfo = 
 {
@@ -972,17 +972,17 @@ public void OnConfigsExecuted()
 		Handle SortArray = CreateArray(128);
 		Handle keyValues = CreateKeyValues("NotifyRulesCvars");
 		
-		char CvarName[128], sDummy_Value[1];
+		char CvarName[128];
 		int flags;
 		bool bCommand;
-		Handle iterator = FindFirstConCommand(CvarName, sizeof(CvarName), bCommand, flags, sDummy_Value, 0)
+		Handle iterator = FindFirstConCommand(CvarName, sizeof(CvarName), bCommand, flags)
 		
 		if(iterator != INVALID_HANDLE)
 		{
 			if(!bCommand && (flags & FCVAR_NOTIFY) && !(flags & FCVAR_PROTECTED))
 				PushArrayString(SortArray, CvarName);
 				
-			while(FindNextConCommand(iterator, CvarName, sizeof(CvarName), bCommand, flags, sDummy_Value, 0))
+			while(FindNextConCommand(iterator, CvarName, sizeof(CvarName), bCommand, flags))
 			{
 				if(bCommand)
 					continue;
@@ -2540,7 +2540,7 @@ public void OnMapStart()
 	hRRTimer = INVALID_HANDLE;
 	RestartNR = false;
 	
-	RequestFrame(RestartRoundOnMapStart, 0);
+	RequestFrame(RestartRoundOnMapStart);
 	
 	if(isCSGO)
 		TriggerTimer(CreateTimer(3600.0, Timer_FromMapStart_PerHour, _, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT), true);
@@ -2555,7 +2555,7 @@ public Action Timer_FromMapStart_PerHour(Handle hTimer)
 	}
 		
 }
-public void RestartRoundOnMapStart(int dummy_value)
+public void RestartRoundOnMapStart()
 {
 	if(!isLateLoaded && GetConVarBool(hcv_ucRestartRoundOnMapStart))
 		CS_TerminateRound(0.1, CSRoundEnd_Draw, true);
@@ -4873,7 +4873,7 @@ public void QueryLastConnected(int client, int ItemPos, char[] AuthStr)
 	else
 	{
 		char sQuery[512];
-		dbLocal.Format(sQuery, sizeof(sQuery), "SELECT * FROM UsefulCommands_LastPlayers WHERE Name like %s OR AuthId like %s OR IPAddress like %s ORDER BY LastConnect DESC", AuthStr, AuthStr, AuthStr); 
+		dbLocal.Format(sQuery, sizeof(sQuery), "SELECT * FROM UsefulCommands_LastPlayers WHERE Name LIKE '%%%s%%' OR AuthId LIKE '%%%s%%' OR IPAddress LIKE '%%%s%%' ORDER BY LastConnect DESC", AuthStr, AuthStr, AuthStr); 
 		
 		dbLocal.Query(SQLCB_LastConnected, sQuery, DP); 
 	}
@@ -5630,6 +5630,14 @@ public int WepStatsSelectedMenu_Handler(Handle hMenu, MenuAction action, int cli
 
 public Action Command_UC(int client, int args)
 {
+	ShowUCMenu(client, 0);
+	
+	return Plugin_Handled;
+}
+
+void ShowUCMenu(int client, int item)
+{
+
 	Handle hMenu = CreateMenu(UCMenu_Handler);
 	
 	Handle Trie_Snapshot = CreateTrieSnapshot(Trie_UCCommands);
@@ -5641,24 +5649,39 @@ public Action Command_UC(int client, int args)
 	if(isCSGO())
 		AddMenuItem(hMenu, "sm_settings", "sm_settings");
 	
+	char Info[300];
+	
+	int len;
+	
+	int adminflags;
+	char sAdminFlags[11];
+			
 	for(int i=0;i < size;i++)
 	{
 		GetTrieSnapshotKey(Trie_Snapshot, i, buffer, sizeof(buffer));
 		
-		int adminflags;
 		
-		GetTrieValue(Trie_UCCommands, buffer, adminflags);
+		GetTrieString(Trie_UCCommands, buffer, Info, sizeof(Info));
 		
+		len = BreakString(Info, sAdminFlags, sizeof(sAdminFlags));
+		
+		adminflags = StringToInt(sAdminFlags);
+		
+		if(len == -1)
+			Info[0] = EOS;
+			
+		else
+			Format(Info, sizeof(Info), Info[len]);
+			
 		if(CheckCommandAccess(client, "sm_null_command", adminflags, true))
-			AddMenuItem(hMenu, buffer, buffer);
+			AddMenuItem(hMenu, Info, buffer);
 	}
 
 	CloseHandle(Trie_Snapshot);
-	DisplayMenu(hMenu, client, MENU_TIME_FOREVER);
+	DisplayMenuAtItem(hMenu, client, item, MENU_TIME_FOREVER);
 	
-	return Plugin_Handled;
+	
 }
-
 
 public int UCMenu_Handler(Handle hMenu, MenuAction action, int client, int item)
 {
@@ -5667,12 +5690,15 @@ public int UCMenu_Handler(Handle hMenu, MenuAction action, int client, int item)
 		
 	else if(action == MenuAction_Select)
 	{
-		char Command[50], sIgnore[1];
-		int iIgnore;
+		char Info[256], Command[50];
 		
-		GetMenuItem(hMenu, item, Command, sizeof(Command), iIgnore, sIgnore, 0);
+		GetMenuItem(hMenu, item, Info, sizeof(Info), _, Command, sizeof(Command));
 		
-		FakeClientCommand(client, Command);
+		StripQuotes(Info);
+		PrintToChat(client, "\"%s\" - %s", Command, Info);
+		PrintToConsole(client, "\"%s\" - %s", Command, Info);
+		
+		ShowUCMenu(client, GetMenuSelectionPosition());
 	}
 	return 0;
 }
@@ -6764,13 +6790,21 @@ stock void UC_PrintCenterTextAll(const char[] msg_name, const char[] param1 = ""
 stock void UC_RegAdminCmd(const char[] cmd, ConCmd callback, int adminflags, const char[] description = "", const char[] group = "", int flags = 0)
 {
 	RegAdminCmd(cmd, callback, adminflags, description, group, flags);
-	SetTrieValue(Trie_UCCommands, cmd, adminflags);
+	
+	char Info[300];
+	FormatEx(Info, sizeof(Info), "\"%i\" \"%s\"", adminflags, description);
+	
+	SetTrieString(Trie_UCCommands, cmd, Info);
 }
 
 stock void UC_RegConsoleCmd(const char[] cmd, ConCmd callback, const char[] description = "", int flags = 0)
 {
 	RegConsoleCmd(cmd, callback, description, flags);
-	SetTrieValue(Trie_UCCommands, cmd, 0);
+
+	char Info[300];
+	FormatEx(Info, sizeof(Info), "\"%i\" \"%s\"", 0, description);
+	
+	SetTrieString(Trie_UCCommands, cmd, Info);
 }
 
 

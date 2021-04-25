@@ -2,10 +2,11 @@
 {
 	"Version"
 	{
-		"Latest"	"5.7"
+		"Latest"	"5.8"
 	}
 	
-	"Notes"	"Fixed all player stuck involved commands ( bury, goto, etc... )"
+	"Notes"	"!uc now gives command info over executing the command, preventing the issue of accidentally ruining something with !rg or !rr"
+	"Notes"	"!last finally accepts an argument to match something, for example: "!last Eyal" Will find all users named Eyal.
 }
 	
 "Files"

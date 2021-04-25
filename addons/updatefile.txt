@@ -6,7 +6,8 @@
 	}
 	
 	"Notes"	"!uc now gives command info over executing the command, preventing the issue of accidentally ruining something with !rg or !rr"
-	"Notes"	"!last finally accepts an argument to match something, for example: "!last Eyal" Will find all users named Eyal."
+	"Notes"	"!last finally accepts an argument to match something, for example: !last Eyal
+	will find all users named Eyal."
 }
 	
 "Files"

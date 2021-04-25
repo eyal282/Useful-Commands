@@ -4952,7 +4952,7 @@ public int LastConnected_MenuHandler(Handle hMenu, MenuAction action, int client
 		{
 			Format(IPAddress, sizeof(IPAddress), "%t", "No Admin Access");
 		}	
-		FormatTime(Date, sizeof(Date), "%d/%m/%Y - %H:%M:%S", LastConnect);
+		FormatTime(Date, sizeof(Date), "%Y/%m/%d - %H:%M:%S", LastConnect);
 		
 		UC_PrintToChat(client, "%s%t", UCTag, "Command Last Name SteamID", Name, AuthId);
 		UC_PrintToChat(client, "%t", "Command Last IP Last Disconnect", IPAddress, Date); // Rarely but still, I won't use the UC tag to show continuity. 

@@ -212,7 +212,6 @@ Handle hCookie_EnablePM = INVALID_HANDLE;
 Handle hCookie_AceFunFact = INVALID_HANDLE;
 
 Handle TIMER_UBERSLAP[MAXPLAYERS+1] = INVALID_HANDLE;
-Handle TIMER_STUCK[MAXPLAYERS+1] = INVALID_HANDLE;
 Handle TIMER_LIFTOFF[MAXPLAYERS+1] = INVALID_HANDLE;
 Handle TIMER_ROCKETCHECK[MAXPLAYERS+1] = INVALID_HANDLE;
 Handle TIMER_LASTC4[MAXPLAYERS+1] = INVALID_HANDLE;
@@ -2028,11 +2027,7 @@ public Action Event_PlayerDeath(Handle hEvent, const char[] Name, bool dontBroad
 		CloseHandle(TIMER_UBERSLAP[client]);
 		TIMER_UBERSLAP[client] = INVALID_HANDLE;
 	}
-	if(TIMER_STUCK[client] != INVALID_HANDLE)
-	{
-		CloseHandle(TIMER_STUCK[client]);
-		TIMER_STUCK[client] = INVALID_HANDLE;
-	}
+
 	if(TIMER_LASTC4[client] != INVALID_HANDLE)
 	{
 		CloseHandle(TIMER_LASTC4[client]);
@@ -2368,11 +2363,7 @@ public void OnClientDisconnect(int client)
 		CloseHandle(TIMER_UBERSLAP[client]);
 		TIMER_UBERSLAP[client] = INVALID_HANDLE;
 	}
-	if(TIMER_STUCK[client] != INVALID_HANDLE)
-	{
-		CloseHandle(TIMER_STUCK[client]);
-		TIMER_STUCK[client] = INVALID_HANDLE;
-	}
+
 	if(TIMER_LIFTOFF[client] != INVALID_HANDLE)
 	{
 		CloseHandle(TIMER_LIFTOFF[client]);
@@ -2538,7 +2529,6 @@ public void OnMapStart()
 	for(int i=1;i < MAXPLAYERS+1;i++)
 	{
 		TIMER_UBERSLAP[i] = INVALID_HANDLE;
-		TIMER_STUCK[i] = INVALID_HANDLE;
 		TIMER_LIFTOFF[i] = INVALID_HANDLE;
 		TIMER_ROCKETCHECK[i] = INVALID_HANDLE;
 		TIMER_LASTC4[i] = INVALID_HANDLE;
@@ -3685,7 +3675,8 @@ public Action Command_GoTo(int client, int args)
 	
 	float Origin[3];
 	
-	GetEntPropVector(target, Prop_Data, "m_vecOrigin", Origin);
+	GetClientAbsOrigin(target, Origin);
+	// GetEntPropVector(target, Prop_Data, "m_vecOrigin", Origin);
 	
 	if(
 	(view_as<Collision_Group_t>(GetEntProp(client, Prop_Send, "m_CollisionGroup")) == COLLISION_GROUP_DEBRIS_TRIGGER && view_as<Collision_Group_t>(GetEntProp(target, Prop_Send, "m_CollisionGroup")) == COLLISION_GROUP_DEBRIS_TRIGGER)
@@ -5994,9 +5985,6 @@ stock void UC_BuryPlayer(int client)
 	
 	TeleportEntity(client, Origin, NULL_VECTOR, NULL_VECTOR);
 	
-	if(TIMER_STUCK[client] != INVALID_HANDLE)
-		TriggerTimer(TIMER_STUCK[client], true);
-	
 }
 
 /*
@@ -6013,13 +6001,12 @@ stock void UC_DeathMarkPlayer(int client, bool mark)
 stock void UC_UnburyPlayer(int client)
 {
 	float Origin[3];
-		
-	GetEntPropVector(client, Prop_Data, "m_vecOrigin", Origin);	
+	
+	GetClientAbsOrigin(client, Origin);
+	//GetEntPropVector(client, Prop_Data, "m_vecOrigin", Origin);	
 	int i = 0;
-	while(IsPlayerStuck(client, Origin))
-	{
-		Origin[2] += 30.0;
-		
+	while(IsPlayerStuck(client, Origin, float(i) * 30.0))
+	{	
 		i++;
 		
 		if(i == 50)
@@ -6029,12 +6016,11 @@ stock void UC_UnburyPlayer(int client)
 		}
 	}
 	
+	Origin[2] += float(i) * 30.0;
+	
 	TeleportEntity(client, Origin, NULL_VECTOR, NULL_VECTOR);
 	
 	TeleportToGround(client);
-	
-	if(TIMER_STUCK[client] != INVALID_HANDLE)
-		TriggerTimer(TIMER_STUCK[client], true);
 }	
 
 stock bool IsPlayerStuck(int client, const float Origin[3] = NULL_VECTOR, float HeightOffset = 0.0)
@@ -6045,11 +6031,15 @@ stock bool IsPlayerStuck(int client, const float Origin[3] = NULL_VECTOR, float 
 	GetClientMaxs(client, vecMax);
     
 	if(UC_IsNullVector(Origin))
+	{
 		GetClientAbsOrigin(client, vecOrigin);
 		
+		vecOrigin[2] += HeightOffset;
+	}	
 	else
 	{
 		vecOrigin = Origin;
+		
 		vecOrigin[2] += HeightOffset;
     }
 	
@@ -6876,7 +6866,6 @@ stock void UC_CreateEmptyFile(const char[] Path)
 {
 	CloseHandle(OpenFile(Path, "a"));
 }
-
 
 /**
  * Merges two KeyValues into one.

@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "5.8"
+#define PLUGIN_VERSION "6.1"
 
 public Plugin myinfo = 
 {
@@ -85,7 +85,7 @@ enum Collision_Group_t
 
 #define GAME_RULES_CVARS_PATH "gamerulescvars.txt"
 
-#define UPDATE_URL    "https://raw.githubusercontent.com/eyal282/Useful-Commands/master/addons/updatefile.txt"
+#define UPDATE_URL    "https://raw.githubusercontent.com/eyal282/Useful-Commands/master/addons/sourcemod/updatefile.txt"
 
 #define COMMAND_FILTER_NONE 0
 
@@ -493,6 +493,10 @@ public void UsefulCommands_OnPlayerAcePost(int client, const char[] FunFact, int
 
 public void OnPluginStart()
 {
+	TeleportsArray = CreateArray(1);
+			
+	BombResetsArray = CreateArray(1);
+	
 	GameName = GetEngineVersion();
 	
 	#if defined _autoexecconfig_included
@@ -556,12 +560,6 @@ public void OnPluginStart()
 		
 		SetCookieMenuItem(PartyModeCookieMenu_Handler, 0, "Party Mode");
 		
-		if(TeleportsArray == INVALID_HANDLE)
-			TeleportsArray = CreateArray(1);
-			
-		if(BombResetsArray == INVALID_HANDLE)
-			BombResetsArray = CreateArray(1);
-		
 		PrecacheSoundAny(PartySound);
 		
 		PrecacheSoundAny(ItemPickUpSound);
@@ -612,6 +610,7 @@ public void OnLibraryAdded(const char[] name)
 	}
 	#endif
 }
+
 /*
 public Action:Test(  int clients[64],
   int &numClients,
@@ -6884,17 +6883,28 @@ stock void UC_StringToUpper(char[] buffer)
 
 stock ConVar UC_CreateConVar(const char[] name, const char[] defaultValue, const char[] description = "", int flags = 0, bool hasMin = false, float min = 0.0, bool hasMax = false, float max = 0.0)
 {
-	return AutoExecConfig_CreateConVar(name, defaultValue, description, flags, hasMin, min, hasMax, max);
+	ConVar hndl = AutoExecConfig_CreateConVar(name, defaultValue, description, flags, hasMin, min, hasMax, max);
+	
+	if(flags & FCVAR_PROTECTED)
+		ServerCommand("sm_cvar protect %s", name);
+		
+	return hndl;
 }
 
 #else
 
 stock ConVar UC_CreateConVar(const char[] name, const char[] defaultValue, const char[] description = "", int flags = 0, bool hasMin = false, float min = 0.0, bool hasMax = false, float max = 0.0)
 {
-	return CreateConVar(name, defaultValue, description, flags, hasMin, min, hasMax, max);
+	ConVar hndl = CreateConVar(name, defaultValue, description, flags, hasMin, min, hasMax, max);
+	
+	if(flags & FCVAR_PROTECTED)
+		ServerCommand("sm_cvar protect %s", name);
+		
+	return hndl;
 }
  
 #endif
+
 
 stock void UC_CreateEmptyFile(const char[] Path)
 {

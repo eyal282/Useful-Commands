@@ -2,12 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"6.0"
+		"Latest"	"6.1"
 	}
 	
-	"Notes"	"!uc now gives command info over executing the command, preventing the issue of accidentally ruining something with !rg or !rr"
-	"Notes"	"!last finally accepts an argument to match something, for example: !last Eyal..."
-	"Notes" "...will find all users named Eyal."
+	"Notes"	"Fixed horrible bug that broke down the entire plugin"
 }
 	
 "Files"

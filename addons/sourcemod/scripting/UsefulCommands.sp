@@ -20,7 +20,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "6.1"
+#define PLUGIN_VERSION "6.2"
 
 public Plugin myinfo = 
 {
@@ -911,6 +911,10 @@ public void Event_TeleportSpawnPost(int entity)
 		PushArrayCell(TeleportsArray, EntIndexToEntRef(entity));
 		return;
 	}
+	
+	if(GetConVarInt(hcv_ucTeleportBomb) == -1)
+		return;
+		
 	int bombReset = CreateEntityByName("trigger_bomb_reset");
 	
 	if(bombReset == -1)

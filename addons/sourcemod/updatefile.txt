@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"6.1"
+		"Latest"	"6.2"
 	}
 	
 	"Notes"	"Fixed horrible bug that broke down the entire plugin"

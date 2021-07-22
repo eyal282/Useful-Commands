@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"6.0"
+		"Latest"	"10.0"
 	}
 	
 	"Notes"	"!uc now gives command info over executing the command, preventing the issue of accidentally ruining something with !rg or !rr"

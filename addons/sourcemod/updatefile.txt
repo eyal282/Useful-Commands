@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"6.2"
+		"Latest"	"6.3"
 	}
 	
-	"Notes"	"Fixed horrible bug that broke down the entire plugin"
+	"Notes"	"L4D2 support"
 }
 	
 "Files"

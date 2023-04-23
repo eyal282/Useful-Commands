@@ -1,7 +1,6 @@
 // To do: Add weapon stats comparison based on what I used with Big Bertha
 
 #include <clientprefs>
-#include <cstrike>
 #include <emitsoundany>
 #include <sdkhooks>
 #include <sdktools>
@@ -9,10 +8,7 @@
 
 #undef REQUIRE_PLUGIN
 #undef REQUIRE_EXTENSIONS
-#tryinclude < cURL>
-#tryinclude < socket>
-#tryinclude < steamtools>
-#tryinclude < SteamWorks>
+#include <cstrike>
 #tryinclude < updater>    // Comment out this line to remove updater support by force.
 #tryinclude < autoexecconfig>
 #define REQUIRE_PLUGIN
@@ -512,17 +508,23 @@ public void OnPluginStart()
 	// svCheatsFlags = GetConVarFlags(hcv_svCheats);
 
 	hcv_ucTag                      = UC_CreateConVar("uc_tag", "[{RED}UC{NORMAL}] {NORMAL}", _, FCVAR_PROTECTED);
-	hcv_TagScale                   = UC_CreateConVar("uc_bullet_tagging_scale", "1.0", "5000000.0 is more than enough to disable tagging completely. Below 1.0 makes tagging stronger. 1.0 for default game behaviour", FCVAR_NOTIFY, true, 0.0);
-	hcv_ucSpecialC4Rules           = UC_CreateConVar("uc_special_bomb_rules", "0", "If 1, CT can pick-up C4 but can't abuse it in any way ( e.g dropping it in unreachable spots ) and can't get rid of it unless to another player.", FCVAR_NOTIFY);
-	hcv_ucAcePriority              = UC_CreateConVar("uc_ace_priority", "2", "Prioritize Ace over all other fun facts of a round's end and print a message when a player makes an ace. Set to 2 if you want players to have a custom fun fact on ace.");
-	hcv_ucReviveOnTeamChange       = UC_CreateConVar("uc_revive_on_team_change", "1", "When an admin set a player's team: 0 - Slay player. 1 = Revive player. 2 = Just switch.");
-	hcv_ucRestartRoundOnMapStart   = UC_CreateConVar("uc_restart_round_on_map_start", "1", "Restart the round when the map starts to block bug where round_start is never called on the first round.");
-	hcv_ucIgnoreRoundWinConditions = UC_CreateConVar("uc_ignore_round_win_conditions", "0", "Should rounds be infinite? Cvar doesn't support toggles, just pick a constant value.");
+
+	if(isCStrike())
+	{
+		hcv_TagScale                   = UC_CreateConVar("uc_bullet_tagging_scale", "1.0", "5000000.0 is more than enough to disable tagging completely. Below 1.0 makes tagging stronger. 1.0 for default game behaviour", FCVAR_NOTIFY, true, 0.0);
+		hcv_ucSpecialC4Rules           = UC_CreateConVar("uc_special_bomb_rules", "0", "If 1, CT can pick-up C4 but can't abuse it in any way ( e.g dropping it in unreachable spots ) and can't get rid of it unless to another player.", FCVAR_NOTIFY);
+		hcv_ucAcePriority              = UC_CreateConVar("uc_ace_priority", "2", "Prioritize Ace over all other fun facts of a round's end and print a message when a player makes an ace. Set to 2 if you want players to have a custom fun fact on ace.");
+		hcv_ucReviveOnTeamChange       = UC_CreateConVar("uc_revive_on_team_change", "1", "When an admin set a player's team: 0 - Slay player. 1 = Revive player. 2 = Just switch.");
+		hcv_ucRestartRoundOnMapStart   = UC_CreateConVar("uc_restart_round_on_map_start", "1", "Restart the round when the map starts to block bug where round_start is never called on the first round.");
+		hcv_ucIgnoreRoundWinConditions = UC_CreateConVar("uc_ignore_round_win_conditions", "0", "Should rounds be infinite? Cvar doesn't support toggles, just pick a constant value.");
+
+		HookConVarChange(hcv_ucIgnoreRoundWinConditions, hcvChange_ucIgnoreRoundWinConditions);
+	}
+
 	hcv_ucAnnouncePlugin           = UC_CreateConVar("uc_announce_plugin", "36.5", "Announces to joining players that the best utility plugin is running, this cvar's value when after a player joins he'll get the message. 0 to disable.");
 
 	GetConVarString(hcv_ucTag, UCTag, sizeof(UCTag));
 	HookConVarChange(hcv_ucTag, hcvChange_ucTag);
-	HookConVarChange(hcv_ucIgnoreRoundWinConditions, hcvChange_ucIgnoreRoundWinConditions);
 
 	if (isCSGO())
 	{
@@ -551,9 +553,14 @@ public void OnPluginStart()
 	HookEvent("player_death", Event_PlayerDeath, EventHookMode_Post);
 	// HookEvent("player_death", Event_PlayerDeathPre, EventHookMode_Pre);
 	HookEvent("player_team", Event_PlayerTeam, EventHookMode_Post);
-	HookEvent("cs_win_panel_round", Event_CsWinPanelRound, EventHookMode_Pre);
+
+	if(isCStrike())
+	{
+		HookEvent("cs_win_panel_round", Event_CsWinPanelRound, EventHookMode_Pre);
+		HookEvent("round_freeze_end", Event_RoundFreezeEnd, EventHookMode_PostNoCopy);
+	}
+
 	HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
-	HookEvent("round_freeze_end", Event_RoundFreezeEnd, EventHookMode_PostNoCopy);
 	HookEvent("round_end", Event_RoundEnd, EventHookMode_Post);
 
 #if defined _updater_included
@@ -577,11 +584,11 @@ public void OnPluginStart()
 
 #if defined _updater_included
 
-public int Updater_OnPluginUpdated()
+public void Updater_OnPluginUpdated()
 {
 	ServerCommand("sm_reload_translations");
 
-	ReloadPlugin(INVALID_HANDLE);
+	Updater_ReloadPlugin(INVALID_HANDLE);
 }
 #endif
 
@@ -611,17 +618,20 @@ public Action:Test(  int clients[64],
 */
 public void OnAllPluginsLoaded()
 {
-	if (!CommandExists("sm_revive"))
-		UC_RegAdminCmd("sm_revive", Command_Revive, ADMFLAG_BAN, "Respawns a player from the dead");
+	if(isCStrike())
+	{
+		if (!CommandExists("sm_revive"))
+			UC_RegAdminCmd("sm_revive", Command_Revive, ADMFLAG_BAN, "Respawns a player from the dead");
 
-	if (!CommandExists("sm_respawn"))
-		UC_RegAdminCmd("sm_respawn", Command_Revive, ADMFLAG_BAN, "Respawns a player from the dead");
+		if (!CommandExists("sm_respawn"))
+			UC_RegAdminCmd("sm_respawn", Command_Revive, ADMFLAG_BAN, "Respawns a player from the dead");
 
-	if (!CommandExists("sm_1up"))
-		UC_RegAdminCmd("sm_1up", Command_HardRevive, ADMFLAG_BAN, "Respawns a player from the dead back to his death position");
-
-	if (!CommandExists("sm_hrevive"))
-		UC_RegAdminCmd("sm_hrevive", Command_HardRevive, ADMFLAG_BAN, "Respawns a player from the dead back to his death position");
+		if (!CommandExists("sm_1up"))
+			UC_RegAdminCmd("sm_1up", Command_HardRevive, ADMFLAG_BAN, "Respawns a player from the dead back to his death position");
+	
+		if (!CommandExists("sm_hrevive"))
+			UC_RegAdminCmd("sm_hrevive", Command_HardRevive, ADMFLAG_BAN, "Respawns a player from the dead back to his death position");
+	}
 
 	if (!CommandExists("sm_bury"))
 		UC_RegAdminCmd("sm_bury", Command_Bury, ADMFLAG_BAN, "Buries a player underground");
@@ -632,26 +642,29 @@ public void OnAllPluginsLoaded()
 	if (!CommandExists("sm_uberslap"))
 		UC_RegAdminCmd("sm_uberslap", Command_UberSlap, ADMFLAG_BAN, "Slaps a player 100 times, leaving him with 1 hp");
 
-	if (!CommandExists("sm_heal"))
-		UC_RegAdminCmd("sm_heal", Command_Heal, ADMFLAG_BAN, "Allows to either heal a player, give him armor or a helmet.");
+	if(isCStrike())
+	{
+		if (!CommandExists("sm_heal"))
+			UC_RegAdminCmd("sm_heal", Command_Heal, ADMFLAG_BAN, "Allows to either heal a player, give him armor or a helmet.");
 
-	if (!CommandExists("sm_hp"))
-		UC_RegAdminCmd("sm_hp", Command_Heal, ADMFLAG_BAN, "Allows to either heal a player, give him armor or a helmet.");
+		if (!CommandExists("sm_hp"))
+			UC_RegAdminCmd("sm_hp", Command_Heal, ADMFLAG_BAN, "Allows to either heal a player, give him armor or a helmet.");
 
-	if (!CommandExists("sm_give"))
-		UC_RegAdminCmd("sm_give", Command_Give, ADMFLAG_CHEATS, "Give a weapon for a player.");
+		if (!CommandExists("sm_give"))
+			UC_RegAdminCmd("sm_give", Command_Give, ADMFLAG_CHEATS, "Give a weapon for a player.");
 
-	if (!CommandExists("sm_rr"))
-		UC_RegAdminCmd("sm_rr", Command_RestartRound, ADMFLAG_CHANGEMAP, "Restarts the round.");
+		if (!CommandExists("sm_rr"))
+			UC_RegAdminCmd("sm_rr", Command_RestartRound, ADMFLAG_CHANGEMAP, "Restarts the round.");
 
-	if (!CommandExists("sm_restartround"))
-		UC_RegAdminCmd("sm_restartround", Command_RestartRound, ADMFLAG_CHANGEMAP, "Restarts the round.");
+		if (!CommandExists("sm_restartround"))
+			UC_RegAdminCmd("sm_restartround", Command_RestartRound, ADMFLAG_CHANGEMAP, "Restarts the round.");
 
-	if (!CommandExists("sm_rg"))
-		UC_RegAdminCmd("sm_rg", Command_RestartGame, ADMFLAG_CHANGEMAP, "Restarts the game.");
+		if (!CommandExists("sm_rg"))
+			UC_RegAdminCmd("sm_rg", Command_RestartGame, ADMFLAG_CHANGEMAP, "Restarts the game.");
 
-	if (!CommandExists("sm_restartgame"))
-		UC_RegAdminCmd("sm_restartgame", Command_RestartGame, ADMFLAG_CHANGEMAP, "Restarts the game.");
+		if (!CommandExists("sm_restartgame"))
+			UC_RegAdminCmd("sm_restartgame", Command_RestartGame, ADMFLAG_CHANGEMAP, "Restarts the game.");
+	}
 
 	if (!CommandExists("sm_restart"))
 		UC_RegAdminCmd("sm_restart", Command_RestartServer, ADMFLAG_CHANGEMAP, "Restarts the server after 5 seconds. Type again to abort restart.");
@@ -659,8 +672,11 @@ public void OnAllPluginsLoaded()
 	if (!CommandExists("sm_restartserver"))
 		UC_RegAdminCmd("sm_restartserver", Command_RestartServer, ADMFLAG_CHANGEMAP, "Restarts the server after 5 seconds. Type again to abort restart.");
 
-	if (!CommandExists("sm_glow"))
-		UC_RegAdminCmd("sm_glow", Command_Glow, ADMFLAG_BAN, "Puts glow on a player for all to see.");
+	if(isCStrike())
+	{
+		if (!CommandExists("sm_glow"))
+			UC_RegAdminCmd("sm_glow", Command_Glow, ADMFLAG_BAN, "Puts glow on a player for all to see.");
+	}
 
 	if (!CommandExists("sm_blink"))
 		UC_RegAdminCmd("sm_blink", Command_Blink, ADMFLAG_BAN, "Teleports the player to where you are aiming");
@@ -709,17 +725,20 @@ public void OnAllPluginsLoaded()
 	if (!CommandExists("sm_bruteexec"))
 		UC_RegAdminCmd("sm_bruteexec", Command_BruteExec, ADMFLAG_BAN, "Makes a player execute a command with !fakeexec but letting him have admin flags to accomplish the action. Use !exec if doesn't work.");
 
-	if (!CommandExists("sm_money"))
-		UC_RegAdminCmd("sm_money", Command_Money, ADMFLAG_GENERIC, "Sets a player's money.");
+	if(isCStrike())
+	{
+		if (!CommandExists("sm_money"))
+			UC_RegAdminCmd("sm_money", Command_Money, ADMFLAG_GENERIC, "Sets a player's money.");
 
-	if (!CommandExists("sm_team"))
-		UC_RegAdminCmd("sm_team", Command_Team, ADMFLAG_GENERIC, "Sets a player's team.");
+		if (!CommandExists("sm_team"))
+			UC_RegAdminCmd("sm_team", Command_Team, ADMFLAG_GENERIC, "Sets a player's team.");
 
-	if (!CommandExists("sm_swap"))
-		UC_RegAdminCmd("sm_swap", Command_Swap, ADMFLAG_GENERIC, "Swaps a player to the opposite team.");
+		if (!CommandExists("sm_swap"))
+			UC_RegAdminCmd("sm_swap", Command_Swap, ADMFLAG_GENERIC, "Swaps a player to the opposite team.");
 
-	if (!CommandExists("sm_spec"))
-		UC_RegAdminCmd("sm_spec", Command_Spec, ADMFLAG_GENERIC, "Moves a player to spectator team.");
+		if (!CommandExists("sm_spec"))
+			UC_RegAdminCmd("sm_spec", Command_Spec, ADMFLAG_GENERIC, "Moves a player to spectator team.");
+	}
 
 	if (!CommandExists("sm_xyz"))
 		UC_RegAdminCmd("sm_xyz", Command_XYZ, ADMFLAG_GENERIC, "Prints your origin.");
@@ -742,8 +761,11 @@ public void OnAllPluginsLoaded()
 	if (!CommandExists("sm_clear"))
 		UC_RegAdminCmd("sm_clear", Command_ClearChat, ADMFLAG_CHAT, "Clears the chat");
 
-	if (!CommandExists("sm_hug"))
-		UC_RegConsoleCmd("sm_hug", Command_Hug, "Hugs a dead player.");
+	if(isCStrike())
+	{
+		if (!CommandExists("sm_hug"))
+			UC_RegConsoleCmd("sm_hug", Command_Hug, "Hugs a dead player.");
+	}
 
 	UC_RegConsoleCmd("sm_uc", Command_UC, "Shows a list of UC commands.");
 
@@ -889,7 +911,7 @@ public void Event_TeleportSpawnPost(int entity)
 		return;
 	}
 
-	if (GetConVarInt(hcv_ucTeleportBomb) == -1)
+	if (isCSGO() && GetConVarInt(hcv_ucTeleportBomb) == -1)
 		return;
 
 	int bombReset = CreateEntityByName("trigger_bomb_reset");
@@ -1397,7 +1419,7 @@ public Action OnPlayerRunCmd(int client, int& buttons, int& impulse, float vel[3
 
 		ret = Plugin_Changed;
 	}
-	if (!GetConVarBool(hcv_ucSpecialC4Rules))
+	if (isCStrike() && !GetConVarBool(hcv_ucSpecialC4Rules))
 		return ret;
 
 	else if (!(buttons & IN_ATTACK) && !(buttons & IN_USE))
@@ -1498,7 +1520,10 @@ public Action Event_BombDefused(Handle hEvent, const char[] Name, bool dontBroad
 
 public Action Event_WeaponFire(Handle hEvent, const char[] Name, bool dontBroadcast)
 {
-	if (!GetConVarBool(hcv_ucPartyMode))
+	if(!isCSGO())
+		return Plugin_Continue;
+
+	else if (!GetConVarBool(hcv_ucPartyMode))
 		return Plugin_Continue;
 
 	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
@@ -1538,7 +1563,10 @@ public Action Event_WeaponFire(Handle hEvent, const char[] Name, bool dontBroadc
 
 public Action Event_PlayerUse(Handle hEvent, const char[] Name, bool dontBroadcast)
 {
-	if (!GetConVarBool(hcv_ucUseBombPickup))
+	if(!isCSGO())
+		return Plugin_Continue;
+
+	else if (!GetConVarBool(hcv_ucUseBombPickup))
 		return Plugin_Continue;
 
 	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
@@ -1713,6 +1741,9 @@ public Action Event_RoundStart(Handle hEvent, const char[] Name, bool dontBroadc
 
 public Action Event_RoundFreezeEnd(Handle hEvent, const char[] Name, bool dontBroadcast)
 {
+	if(!isCStrike())
+		return Plugin_Continue;
+
 	if (GetConVarBool(hcv_ucIgnoreRoundWinConditions))
 	{
 		ServerCommand("mp_ignore_round_win_conditions 1");
@@ -2196,9 +2227,12 @@ public void Func_OnClientPutInServer(int client)
 	if (AnnounceTimer != 0.0)
 		TIMER_ANNOUNCEPLUGIN[client] = CreateTimer(AnnounceTimer, Timer_AnnounceUCPlugin, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 
-	SDKHook(client, SDKHook_WeaponDropPost, Event_WeaponDropPost);
-	SDKHook(client, SDKHook_WeaponEquipPost, Event_WeaponPickupPost);
-	SDKHook(client, SDKHook_OnTakeDamagePost, Event_OnTakeDamagePost);
+	if(isCStrike())
+	{
+		SDKHook(client, SDKHook_WeaponDropPost, Event_WeaponDropPost);
+		SDKHook(client, SDKHook_WeaponEquipPost, Event_WeaponPickupPost);
+		SDKHook(client, SDKHook_OnTakeDamagePost, Event_OnTakeDamagePost);
+	}
 }
 
 public Action Timer_AnnounceUCPlugin(Handle hTimer, int UserId)
@@ -2524,10 +2558,15 @@ public void OnMapStart()
 	hRRTimer            = INVALID_HANDLE;
 	RestartNR           = false;
 
-	RequestFrame(RestartRoundOnMapStart);
+	if(isCStrike())
+	{
+		RequestFrame(RestartRoundOnMapStart);
+	}
 
-	if (isCSGO)
+	if (isCSGO())
+	{
 		TriggerTimer(CreateTimer(3600.0, Timer_FromMapStart_PerHour, _, TIMER_FLAG_NO_MAPCHANGE | TIMER_REPEAT), true);
+	}
 }
 
 public Action Timer_FromMapStart_PerHour(Handle hTimer)
@@ -6547,6 +6586,16 @@ stock bool isCSGO()
 	return GameName == Engine_CSGO;
 }
 
+stock bool isCSS()
+{
+	return GameName == Engine_CSS;
+}
+
+stock bool isCStrike()
+{
+	return GameName == Engine_CSGO || GameName == Engine_CSS;
+}
+
 stock bool GetStringVector(const char[] str, float Vector[3])    // https://github.com/AllenCodess/Sourcemod-Resources/blob/master/sourcemod-misc.inc
 {
 	if (str[0] == EOS)
@@ -6845,7 +6894,7 @@ stock void UC_SetClientMoney(int client, int money)
 	SetEntProp(client, Prop_Send, "m_iAccount", money);
 	SetEntProp(client, Prop_Send, "m_iStartAccount", money);
 
-	if (isCSGO)
+	if (isCSGO())
 	{
 		int moneyEntity = CreateEntityByName("game_money");
 
